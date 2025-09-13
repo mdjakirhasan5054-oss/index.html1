@@ -1,0 +1,103 @@
+# index.html1
+index.html1
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tap Game Demo - All in One</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f4f8; margin: 0; padding: 20px; text-align:center; }
+  #balance { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+  .game { display: flex; align-items: center; padding: 10px; margin: 10px auto; width:300px; background:#fff; border-radius:12px; box-shadow:0 3px 6px rgba(0,0,0,0.1); cursor:pointer; }
+  .game img { width: 40px; height: 40px; margin-right: 15px; }
+  .locked { opacity: 0.5; cursor: not-allowed; }
+  button { padding:8px 14px; border:none; border-radius:8px; background:#4CAF50; color:white; cursor:pointer; }
+  #telegram { margin-top:20px; font-weight:bold; }
+  input { padding:8px 12px; border-radius:6px; border:1px solid #ccc; width:200px; font-size:14px; }
+</style>
+</head>
+<body>
+
+<h2>🎮 Tap Game Demo</h2>
+<div id="balance">💸 0 💸</div>
+
+<div id="keyDiv">
+  <p>🔑 Enter Access Key to unlock games</p>
+  <input type="text" id="keyInput" placeholder="Enter Key">
+  <button onclick="checkKey()">Unlock</button>
+</div>
+
+<div id="games" style="display:none;">
+  <div class="game" id="game1">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAA..." alt="Color Ball">
+    <span>1) Color Ball 🎨</span>
+  </div>
+  <div class="game locked" id="game2">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAA..." alt="Number Quiz">
+    <span>2) Number Quiz 🔢</span>
+  </div>
+  <div class="game locked" id="game3">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAA..." alt="Emoji Match">
+    <span>3) Emoji Match 😀</span>
+  </div>
+</div>
+
+<div id="telegram" style="display:none;">
+  👉 Join our Telegram: <a href="https://t.me/Bdboyonline" target="_blank">Bdboyonline</a>
+</div>
+
+<script>
+// সঠিক Key লিস্ট
+const correctKeys = ["BDBOY123","JOINBD5054","SUBYT2025"];
+
+let balance = 0;
+let unlockedGame = 1;
+
+function updateBalance(amount){
+  balance += amount;
+  document.getElementById('balance').innerText = `💸 ${balance} 💸`;
+}
+
+function checkKey(){
+  let key = document.getElementById('keyInput').value.trim();
+  if(correctKeys.includes(key)){
+    alert("✅ Key Accepted! Games unlocked.");
+    document.getElementById('keyDiv').style.display = 'none';
+    document.getElementById('games').style.display = 'block';
+    document.getElementById('telegram').style.display = 'block';
+    refreshGames();
+  } else {
+    alert("❌ Wrong Key! Try again.");
+  }
+}
+
+function refreshGames(){
+  for(let i=1;i<=3;i++){
+    let g = document.getElementById('game'+i);
+    if(i<=unlockedGame) g.classList.remove('locked');
+    else g.classList.add('locked');
+  }
+}
+
+for(let i=1;i<=3;i++){
+  document.getElementById('game'+i).addEventListener('click', function(){
+    if(i>unlockedGame){ alert("Complete previous game first!"); return; }
+    if(i===3){
+      let ans = prompt("🔑 Enter the secret key again for Emoji Match:");
+      if(correctKeys.includes(ans)){
+        alert("Correct! +20 coins");
+        updateBalance(20);
+      } else { alert("Wrong! No reward"); return; }
+    } else {
+      alert("Game completed! +10 coins");
+      updateBalance(10);
+    }
+    if(unlockedGame < i+1) unlockedGame = i+1;
+    refreshGames();
+  });
+}
+</script>
+
+</body>
+</html>
